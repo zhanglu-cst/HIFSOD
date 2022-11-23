@@ -18,7 +18,7 @@ fvcore
 pycocotools
 albumentations
 ```
-(It is worth noting that later versions of pytorch may cause the loss to be NaN, which is due to the update of CrossEntroyLoss in different iimplement of ignre_index)
+(It is worth noting that later versions of pytorch may cause the loss to be NaN, which may be due to the update of CrossEntroyLoss loss.)
 
 * Then, run the following command to install   
 ```shell
