@@ -1,0 +1,38 @@
+_BASE_: "../../Base-RCNN-FPN.yaml"
+CATS_UES_JSON: "xxx/xxx/xxx/dataset/annotations/novel.json"
+MODEL:
+  WEIGHTS: "xxx/xxx/xxx/hifsod/checkpoints/origin_version/model_files/model_reset_remove.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 101
+  ROI_HEADS:
+    NAME: "Hierarchical_ROIHeads_Weight"
+    OUTPUT_LAYER: "FastRCNNOutputLayers_WithFC"
+    NUM_CLASSES: 287
+    FREEZE_FEAT: False
+  BACKBONE:
+    FREEZE: True
+  PROPOSAL_GENERATOR:
+    FREEZE: True
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+  ROOT_WEIGHT: 1.0
+DATASETS:
+  TRAIN: ('coco_trainval_novel_5shot_seed1',)
+  TEST: ('bird_test_novel',)
+BALANCE_TRAIN_TREE:
+  ENABLE: True
+  MAX_SAMPLE_RATE: 10
+SOLVER:
+  IMS_PER_BATCH: 16
+  BASE_LR: 0.01
+  STEPS: (10000,)
+  MAX_ITER: 6000
+  CHECKPOINT_PERIOD: 5000
+  WARMUP_ITERS: 0
+TEST:
+  AUG:
+    ENABLED: True
+  EVAL_PERIOD: 500
+OUTPUT_DIR: "checkpoints/long_init_5shot_unfreeze/ft_5shot_novel"

@@ -1,0 +1,44 @@
+_BASE_: "../../Base-RCNN-FPN.yaml"
+CATS_UES_JSON: "xxx/xxx/xxx//datasplit/8k.json"
+MODEL:
+  WEIGHTS: "checkpoints/simple_root1_from_flat_ind_fc/model_files/model_combine_5shot.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 101
+  ROI_HEADS:
+    NAME: "Hierarchical_ROIHeads_Weight"
+    OUTPUT_LAYER: "CosineSimOutputLayers_WithFC"
+    NUM_CLASSES: 1432
+    FREEZE_FEAT: False
+    BATCH_SIZE_PER_IMAGE: 256
+  BACKBONE:
+    FREEZE: True
+  #    FREEZE_AT: 5
+  PROPOSAL_GENERATOR:
+    FREEZE: True
+  RPN:
+    POST_NMS_TOPK_TRAIN: 2000
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+  ROOT_WEIGHT: 1.0
+DATASETS:
+  TRAIN: ('coco_trainval_all_5shot_seed2',)
+  TEST: ('bird_test_all',)
+BALANCE_TRAIN_TREE:
+  ENABLE: True
+  MAX_SAMPLE_RATE: 10
+SOLVER:
+  IMS_PER_BATCH: 16
+  BASE_LR: 0.001
+  GAMMA: 0.3
+  STEPS: (150000,)
+  MAX_ITER: 220000
+  CHECKPOINT_PERIOD: 50000
+  WARMUP_ITERS: 500
+TEST:
+  AUG:
+    ENABLED: True
+  EVAL_PERIOD: 10000
+
+OUTPUT_DIR: "checkpoints/5shot_all_fc/ft_5shot_all_fc_seed2"

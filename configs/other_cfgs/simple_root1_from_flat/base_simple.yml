@@ -1,0 +1,28 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+CATS_UES_JSON: "xxx/xxx/xxx/dataset/annotations/base_train.json"
+MODEL:
+  WEIGHTS: "xxx/xxx/xxx/hifsod/checkpoints/origin_version/model_files/model_reset_remove.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 101
+  ROI_HEADS:
+    NAME: "Hierarchical_ROIHeads_Weight"
+    OUTPUT_LAYER: "FastRCNNOutputLayers"
+    NUM_CLASSES: 1145
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+  ROOT_WEIGHT: 1.0
+DATASETS:
+  TRAIN: ('bird_base_train',)
+  TEST: ('bird_test_base',)
+BALANCE_TRAIN_TREE:
+  ENABLE: True
+  MAX_SAMPLE_RATE: 10
+SOLVER:
+  IMS_PER_BATCH: 16
+  STEPS: (100000, 150000)
+  MAX_ITER: 180000
+TEST:
+  EVAL_PERIOD: 10000
+OUTPUT_DIR: "checkpoints/simple_root1_from_flat/base_training"

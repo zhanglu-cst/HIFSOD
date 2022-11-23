@@ -1,0 +1,43 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+CATS_UES_JSON: "xxx/xxx/xxx//datasplit/8k.json"
+MODEL:
+  WEIGHTS: "checkpoints/fuse_flat_hie_max2/model_files/model_combine_2shot.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 101
+  ROI_HEADS:
+    NAME: "Hierarchical_ROIHeads_Independent_Reg"
+    OUTPUT_LAYER: "CosineSimOutputLayers"
+    NUM_CLASSES: 1432
+    FREEZE_FEAT: False
+    BATCH_SIZE_PER_IMAGE: 256
+  BACKBONE:
+    FREEZE: False
+    FREEZE_AT: 5
+  PROPOSAL_GENERATOR:
+    FREEZE: False
+  RPN:
+    POST_NMS_TOPK_TRAIN: 2000
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+DATASETS:
+  TRAIN: ('coco_trainval_all_2shot_seed1',)
+  TEST: ('bird_test_all',)
+BALANCE_TRAIN_TREE:
+  ENABLE: True
+  MAX_SAMPLE_RATE: 2
+SOLVER:
+  IMS_PER_BATCH: 16
+  BASE_LR: 0.001
+  GAMMA: 0.3
+  STEPS: (90000,)
+  MAX_ITER: 150000
+  CHECKPOINT_PERIOD: 10000
+  WARMUP_ITERS: 200
+TEST:
+  AUG:
+    ENABLED: True
+  EVAL_PERIOD: 5000
+
+OUTPUT_DIR: "checkpoints/fuse_flat_hie_max2/ft_2shot_all"

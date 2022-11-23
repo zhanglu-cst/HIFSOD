@@ -1,0 +1,37 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+CATS_UES_JSON: "xxx/xxx/xxx/dataset/annotations/novel.json"
+MODEL:
+  WEIGHTS: "checkpoints/fuse_flat_hie_ind_fc_head/model_files/model_reset_remove.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 101
+  ROI_HEADS:
+    NAME: "Hierarchical_ROIHeads_Independent_Reg_Head"
+    OUTPUT_LAYER: "FastRCNNOutputLayers_WithFC"
+    NUM_CLASSES: 287
+    FREEZE_FEAT: True
+  BACKBONE:
+    FREEZE: True
+  PROPOSAL_GENERATOR:
+    FREEZE: True
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+DATASETS:
+  TRAIN: ('coco_trainval_novel_2shot_seed1',)
+  TEST: ('bird_test_novel',)
+BALANCE_TRAIN_TREE:
+  ENABLE: True
+  MAX_SAMPLE_RATE: 5
+SOLVER:
+  IMS_PER_BATCH: 16
+  BASE_LR: 0.01
+  STEPS: (10000,)
+  MAX_ITER: 1500
+  CHECKPOINT_PERIOD: 500
+  WARMUP_ITERS: 0
+TEST:
+  AUG:
+    ENABLED: True
+  EVAL_PERIOD: 500
+OUTPUT_DIR: "checkpoints/fuse_flat_hie_ind_fc_head/ft_2shot_novel"
